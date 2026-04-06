@@ -2,14 +2,19 @@
 name = "fastapi-time-app"
 version = "0.1.0"
 description = "API para mostrar la hora actual"
+readme = "README.md"
+requires-python = ">=3.11"
 dependencies = [
     "fastapi",
     "uvicorn",
 ]
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "pytest",
     "httpx",
     "ruff",
 ]
+
+[tool.setuptools]
+py-modules = ["main"]
