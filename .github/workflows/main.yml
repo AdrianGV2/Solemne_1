@@ -21,8 +21,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv pip install --system .
-          uv pip install --system pytest httpx
+          uv pip install --system fastapi uvicorn pytest httpx
 
       - name: Run tests
         run: pytest
