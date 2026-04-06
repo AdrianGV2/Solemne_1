@@ -20,10 +20,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv pip install --system fastapi uvicorn pytest httpx
+          uv pip install --system fastapi uvicorn pytest httpx ruff
 
       - name: Run Linting (Ruff)
-        run: ruff check .
+        run: python -m ruff check .
 
       - name: Run tests
         run: pytest
