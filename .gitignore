@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv/
+env/
+venv/
+uv.lock
+.vscode/
+.idea/
+.coverage
+.pytest_cache/
+*.log

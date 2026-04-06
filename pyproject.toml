@@ -1,0 +1,15 @@
+[project]
+name = "fastapi-time-app"
+version = "0.1.0"
+description = "API para mostrar la hora actual"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest",
+    "httpx",
+    "ruff",
+]
