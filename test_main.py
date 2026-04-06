@@ -7,4 +7,4 @@ client = TestClient(app)
 def test_get_time():
     response = client.get("/time")
     assert response.status_code == 200
-    assert "time" in response.json()
+    assert "timezone_offset" in response.json()
