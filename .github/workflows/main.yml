@@ -7,31 +7,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Descarga el código del repositorio [1]
+      # 1. Descarga el código de tu repositorio [1]
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Instala uv, el gestor de paquetes de alto rendimiento [2]
+      # 2. Instala uv, el gestor de paquetes de alto rendimiento
       - name: Install uv
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
-      # 3. Configura el entorno de Python 3.11 [2]
+      # 3. Configura el entorno de Python 3.11
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
 
-      # 4. Instala dependencias necesarias sin intentar construir el proyecto como paquete
-      # Esto evita el error "Multiple top-level modules discovered"
+      # 4. Instala las dependencias necesarias [2]
+      # Usamos la instalación directa para evitar errores de empaquetado
       - name: Install dependencies
         run: |
           uv pip install --system fastapi uvicorn pytest httpx
 
-      # 5. Ejecuta las pruebas automáticas definidas en test_main.py [3]
+      # 5. Ejecuta las pruebas automáticas de test_main.py [3]
       - name: Run tests
         run: pytest
 
-      # 6. Inicia sesión en el registro de contenedores de GitHub
+      # 6. MEJORA: Convertir el nombre del repositorio a minúsculas
+      # Esto evita el error "repository name must be lowercase"
+      - name: Lowercase repository name
+        run: |
+          echo "REPO_LOWER=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      # 7. Iniciar sesión en el registro de contenedores de GitHub (GHCR)
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -39,11 +45,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # 7. Construye y sube la imagen de Docker con el formato de etiqueta correcto
-      # Esto resuelve el error "invalid reference format"
+      # 8. Construir y subir la imagen de Docker optimizada
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}:latest
+          # Usamos la variable en minúsculas para cumplir con las reglas de Docker
+          tags: ghcr.io/${{ env.REPO_LOWER }}:latest
